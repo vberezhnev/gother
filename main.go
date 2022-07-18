@@ -74,13 +74,13 @@ type apiConfigData struct {
 
 // Use API from file
 func loadApiConfig(filename string) (apiConfigData, error) {
+  var c apiConfigData
 	bytes, err := ioutil.ReadFile(filename)
 
 	if err != nil {
 		return apiConfigData{}, err
 	}
 
-	var c apiConfigData
 	err = json.Unmarshal(bytes, &c)
 	if err != nil {
 		return apiConfigData{}, err
@@ -92,12 +92,12 @@ func loadApiConfig(filename string) (apiConfigData, error) {
 func query(city string) (weatherData, error) {
   var d weatherData
 	
-  /* apiConfig, err := loadApiConfig(".apiConfig")
+  apiConfig, err := loadApiConfig(".apiConfig")
 	if err != nil {
 		return weatherData{}, err
-	} */
+	} 
 
-	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=0fc50e5fe3acdddbea0f8fd6d9795f8b&q=" + city + "&units=metric")
+	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + apiConfig.OpenWeatherMapApiKey + "&q=" + city + "&units=metric")
 	if err != nil {
 		return weatherData{}, err
 	}
