@@ -5,26 +5,23 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strings"
+	// "strings"
 )
 
 func main() {
-	http.HandleFunc("/weather/",
-		func(w http.ResponseWriter, r *http.Request) {
-			city := strings.SplitN(r.URL.Path, "/", 3)[2]
+		var city string
+	
+    fmt.Print("Type a city >>> ")
+		fmt.Scanln(&city)
+		fmt.Println("You type: ", city)
 
-			fmt.Println(query(city))
-			data, err := query(city)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusInternalServerError)
-				return
-			}
+		data, err := query(city)
+		if err != nil {
+			fmt.Println(err.Error(), http.StatusInternalServerError)
+			return
+		}
 
-			w.Header().Set("Content-Type", "application/json; charset=utf-8")
-			fmt.Println(json.NewEncoder(w).Encode(data))
-		})
-
-	http.ListenAndServe(":8080", nil)
+		fmt.Println(data)
 }
 
 // Extract data from API
