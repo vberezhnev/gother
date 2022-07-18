@@ -5,23 +5,32 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	// "strings"
 )
 
 func main() {
-		var city string
-	
-    fmt.Print("Type a city >>> ")
-		fmt.Scanln(&city)
-		fmt.Println("You type: ", city)
+	colorReset := "\033[0m"
 
-		data, err := query(city)
-		if err != nil {
-			fmt.Println(err.Error(), http.StatusInternalServerError)
-			return
-		}
+	colorRed := "\033[31m"
+	/* colorGreen := "\033[32m"
+	colorYellow := "\033[33m" */
+	colorBlue := "\033[34m" 
+	colorPurple := "\033[35m"
+	colorCyan := "\033[36m"
+	//colorWhite := "\033[37m"
 
-		fmt.Println(data)
+	var city string
+
+	fmt.Print(string(colorPurple), "Type a city >>> ")
+	fmt.Scanln(&city)
+
+	data, err := query(city)
+	if err != nil {
+		fmt.Println(err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	fmt.Println(string(colorBlue), "Temperature in", data.Name, "is", string(colorRed), data.Main.Celsius, "°C", string(colorReset))
+  fmt.Println(string(colorCyan), "Fells like", string(colorRed), data.Main.FellsLike)
 }
 
 // Extract data from API
