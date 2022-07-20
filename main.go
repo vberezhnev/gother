@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	colorReset := "\033[0m"
+	//colorReset := "\033[0m"
 
 	colorRed := "\033[31m"
 	colorGreen := "\033[32m"
@@ -30,21 +30,24 @@ func main() {
 	}
 
 	if city != "" {
-		fmt.Println(string(colorBlue), data.Name, ",", data.Sys.Country)
-
 		fmt.Println()
+		fmt.Println(string(colorBlue), data.Name + ", " + data.Sys.Country)
+
 		fmt.Println(string(colorYellow), "/- ====================== -/")
 		fmt.Println()
 
-		fmt.Println(string(colorGreen), "Weather (short info)", string(colorRed), data.Weather)
-		fmt.Println(string(colorGreen), "Description", string(colorRed), data.Weather)
+		fmt.Println(string(colorGreen), "Weather (short info)", string(colorRed), data.Weather[0].Main)
+		fmt.Println(string(colorGreen), "Description", string(colorRed), data.Weather[0].Description)
 
 		fmt.Println()
 
-		fmt.Println(string(colorGreen), "Temperature", "is", string(colorRed), data.Main.Celsius, "°C", string(colorReset))
-		fmt.Println(string(colorGreen), "Fells like", string(colorRed), data.Main.FellsLike)
+    fmt.Println(string(colorGreen), "Temperature:", string(colorRed), data.Main.Celsius, "°C")
+    fmt.Println(string(colorGreen), "Fells like:", string(colorRed), data.Main.FellsLike)
 
-		fmt.Println()
+    fmt.Println(string(colorGreen), "Visibility:", string(colorRed), data.Visibility)
+    fmt.Println(string(colorGreen), "Clouds:", string(colorRed), data.Clouds.All, "%")
+		
+    fmt.Println()
 		fmt.Println(string(colorYellow), "/- ====================== -/")
 		fmt.Println()
 	} else {
@@ -55,10 +58,15 @@ func main() {
 // Extract data from API
 type weatherData struct {
 	Name    string `json:"name"`
-	Weather []struct {
+  Visibility float64 `json:"visibility"`
+	
+  Weather []struct {
 		Main        string `json:"main"`
 		Description string `json:"description"`
 	}
+  Clouds struct {
+    All float64 `json:"all"`
+  }
 	Sys struct {
 		Country string `json:"country"`
 	}
@@ -74,7 +82,7 @@ type apiConfigData struct {
 
 // Use API from file
 func loadApiConfig(filename string) (apiConfigData, error) {
-  var c apiConfigData
+	var c apiConfigData
 	bytes, err := ioutil.ReadFile(filename)
 
 	if err != nil {
@@ -90,12 +98,12 @@ func loadApiConfig(filename string) (apiConfigData, error) {
 }
 
 func query(city string) (weatherData, error) {
-  var d weatherData
-	
-  apiConfig, err := loadApiConfig(".apiConfig")
+	var d weatherData
+
+	apiConfig, err := loadApiConfig(".apiConfig.json")
 	if err != nil {
 		return weatherData{}, err
-	} 
+	}
 
 	resp, err := http.Get("http://api.openweathermap.org/data/2.5/weather?APPID=" + apiConfig.OpenWeatherMapApiKey + "&q=" + city + "&units=metric")
 	if err != nil {
