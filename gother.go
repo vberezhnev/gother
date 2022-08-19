@@ -43,7 +43,7 @@ func main() {
 		fmt.Println()
 
 		fmt.Println(string(colorGreen), "Temperature:", string(colorRed), data.Main.Celsius, "°C")
-		fmt.Println(string(colorGreen), "Fells like:", string(colorRed), data.Main.FellsLike)
+		fmt.Println(string(colorGreen), "Fells like:", string(colorRed), data.Main.FellsLike, "°C")
 
 		fmt.Println(string(colorGreen), "Visibility:", string(colorRed), data.Visibility)
 		fmt.Println(string(colorGreen), "Clouds:", string(colorRed), data.Clouds.All, "%")
